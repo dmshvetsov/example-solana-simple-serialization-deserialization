@@ -42,6 +42,8 @@ pub fn process_instruction(
             msg!("payload.num64: {}", num64);
             msg!("payload.num32: {}", num32);
             // and enum
+            // and arr
+            // and nested struct with arr and enum
         }
     }
 
@@ -73,7 +75,7 @@ impl PayloadIx {
             .split_first()
             .ok_or(ProgramError::InvalidInstructionData)?;
         // Use the temporary payload struct to deserialize
-        let payload = Payload::try_from_slice(rest).unwrap();
+        let payload = borsh::from_slice::<Payload>(&rest).unwrap();
         // Match the variant to determine which data struct is expected by
         // the function and return the TestStruct or an error
         Ok(match variant {
